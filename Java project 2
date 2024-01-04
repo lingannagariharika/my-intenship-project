@@ -1,0 +1,52 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class UrlShortener {
+    private Map<String, String> shortToLongMap;
+    private Map<String, String> longToShortMap;
+
+    public UrlShortener() {
+        this.shortToLongMap = new HashMap<>();
+        this.longToShortMap = new HashMap<>();
+    }
+
+    public String shortenUrl(String longUrl) {
+        if (longToShortMap.containsKey(longUrl)) {
+            System.out.println("URL already shortened.");
+            return longToShortMap.get(longUrl);
+        }
+
+        String shortUrl = generateShortUrl(longUrl);
+        shortToLongMap.put(shortUrl, longUrl);
+        longToShortMap.put(longUrl, shortUrl);
+        return shortUrl;
+    }
+
+    public String expandUrl(String shortUrl) {
+        if (!shortToLongMap.containsKey(shortUrl)) {
+            System.out.println("Invalid short URL.");
+            return null;
+        }
+
+        return shortToLongMap.get(shortUrl);
+    }
+
+    private String generateShortUrl(String longUrl) {
+        // Basic hash function for simplicity
+        int hash = longUrl.hashCode();
+        String shortUrl = Integer.toHexString(hash);
+        return shortUrl;
+    }
+
+    public static void main(String[] args) {
+        UrlShortener urlShortener = new UrlShortener();
+
+        // Example usage
+        String longUrl = "https://www.harika.com";
+        String shortUrl = urlShortener.shortenUrl(longUrl);
+        System.out.println("Shortened URL: " + shortUrl);
+
+        String expandedUrl = urlShortener.expandUrl(shortUrl);
+        System.out.println("Expanded URL: " + expandedUrl);
+    }
+}
